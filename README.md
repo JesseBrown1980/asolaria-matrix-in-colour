@@ -57,3 +57,26 @@ write them*. It confirmed the receipt field was blind but **the photographs were
 cell-grid folds are distinct and mean cell brightness rises monotonically 117 → 122.
 
 **Run as it stands:** 10 minutes, **111,040,000 subagents**, 10,000 rooms, `os_process_spawn=0`.
+
+## The Light Harness — and the verdict on this repo
+
+This repo was judged by the harness law from **Lynn's chariots**
+(`LIGHT---lIFEds6-7`, `THE-LIGHT-HARNESS-2026-08-08.md`):
+
+> `HBI -> HBP -> SHA -> SH -> HASH`, eternally. Text stays LF on every platform; binaries are
+> binary and are never touched. A file is judged by **identity** — `blob == working == sidecar`.
+> **GIMEL** if it reproduces whole; **SHIN** if it does not. A lie cannot reproduce its own hash.
+
+**It failed.** Measured on a fresh clone of the public repo: **GIMEL=0, SHIN=4.** Every text
+receipt had been committed with no `.gitattributes`, so git converted LF to CRLF on checkout and
+the receipts stopped reproducing their own digests. The ten photographs were **GIMEL** — git
+treats PNG as binary, so the binary lane held even unguarded.
+
+Worse, the per-minute sidecars had been written to the repo root instead of beside their
+artifacts: `receipts/` held 20 artifacts and **0** sidecars, while 24 sidecars sat in the root
+naming files that were not there. That is the **same defect class** reported in the simulator one
+hour earlier — 5 found there, 24 created here.
+
+Fixed in three parts: the harness `.gitattributes` (reused verbatim, not reinvented), every
+sidecar moved beside its artifact and regenerated from LF bytes, and the **SHIN verdict recorded
+beside the fix** in `HARNESS-VERDICT.hbp` rather than edited away. The stone keeps the mark.
