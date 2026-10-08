@@ -39,3 +39,21 @@ subagents spawn.
 - `INDEX.hbp` / `.hbi` — one row per frame
 
 Seat **ACER-CLAUDE-FABLE5** · pid `8467a937cba309f7` · owner **OP-JESSE** · `E=0`
+
+## Correction (recorded beside the run, never over it)
+
+Two defects were found in the first run and are sealed in `CORRECTION.hbp` rather than edited away:
+
+1. **`substrate_sha256` was blind.** It folded `room -> colour` only, and under create-only the
+   colours never change — so it printed the same digest all ten minutes while the moss deepened.
+   *A field that cannot change is not a measurement.* Fixed to fold `room -> colour -> depth`, and
+   the fix is proven on a rerun: `a9f1a906… -> 53df8883… -> ca22fac6…` as depth went 229 → 419 → 619.
+2. **Frames 06 and 07 are byte-identical.** Minute 6 overran its boundary (436 s against 360 s), so
+   minute 7's deadline had already passed and its spawn loop never ran — it photographed an
+   unchanged substrate one second later. **The run holds 9 distinct states across 10 frames.**
+
+Both were caught by `verify-frames.py`, which decodes the frames with PIL — *a decoder that did not
+write them*. It confirmed the receipt field was blind but **the photographs were not**: 9 of 10
+cell-grid folds are distinct and mean cell brightness rises monotonically 117 → 122.
+
+**Run as it stands:** 10 minutes, **111,040,000 subagents**, 10,000 rooms, `os_process_spawn=0`.
